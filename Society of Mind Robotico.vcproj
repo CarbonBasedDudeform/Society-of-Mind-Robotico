@@ -261,6 +261,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Maps\Hit Observe Testbed.map"
+					>
+				</File>
+				<File
 					RelativePath=".\Maps\Testbed.map"
 					>
 				</File>
