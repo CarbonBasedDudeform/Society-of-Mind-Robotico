@@ -190,6 +190,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Observe.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Rotate.cpp"
 				>
 			</File>
@@ -221,6 +225,10 @@
 			</File>
 			<File
 				RelativePath=".\Forward.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Observe.h"
 				>
 			</File>
 			<File
