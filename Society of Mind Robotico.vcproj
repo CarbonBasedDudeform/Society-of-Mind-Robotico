@@ -242,6 +242,22 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="Maps"
+			>
+			<File
+				RelativePath="D:\Approach Testbed.map"
+				>
+			</File>
+			<File
+				RelativePath="D:\Avoidance Testbed.map"
+				>
+			</File>
+			<File
+				RelativePath="D:\Testbed.map"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
