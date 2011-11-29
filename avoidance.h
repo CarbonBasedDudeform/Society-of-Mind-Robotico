@@ -12,9 +12,6 @@ public:
 	void setRobot(ArRobot *robot);
 
 private:
-	ArRangeDevice *m_sonar;
-	ArRobot *m_robot;
-	ArActionDesired m_desire;
 
 	static const int THRESHOLD = 1500;
 

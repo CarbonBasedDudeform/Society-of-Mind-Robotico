@@ -28,17 +28,13 @@ int main(int argc, char** argv)
 	ArSonarDevice sonar;
 	robot.addRangeDevice(&sonar);
 
-	//robot.setVel(100);
-
 	Avoidance avoidance;
 	robot.addAction(&avoidance, 20);
 	//Approach approach;
-	//robot.addAction(&approach, 20);
+	//robot.addAction(&approach, 100);
 
-	ArModeTeleop teleop(&robot, "teleop", 't', 'T');
+	//ArModeTeleop teleop(&robot, "teleop", 't', 'T');
 	
-	
-	//approach.activateExclusive();
 	//rev those engines; turn the motors on
 	robot.enableMotors();
 

@@ -17,7 +17,7 @@ Avoidance::~Avoidance(void)
 
 ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 	m_desire.reset();
-	
+
 	if (m_sonar == NULL) {
 		deactivate();
 		return NULL;
@@ -25,49 +25,30 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 
 	int lowestReadingSensor = GetLowestReading();
 
-	double left_vel = m_robot->getVel();
-	double right_vel = m_robot->getVel();
-	//int test = GetSensorReading(lowestReadingSensor);
-
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
 		case automata::LEFT_FRONT_SIDE:
-			//left_vel = 1;
-			//right_vel = 1;
 			return forward->fire(currentDesired);
 			break;
 		case automata::LEFT_SIDE:
 		case automata::LEFT_FRONT:
-		case automata::LEFT_BACK:
-			//left_vel = ( ( (double)GetSensorReading(lowestReadingSensor) - m_robot->getRobotRadius() ) / ( (double)THRESHOLD + m_robot->getRobotRadius() ) );//(double)m_sonar->getMaxRange() );
-			//right_vel = 1;
+		//case automata::LEFT_BACK:
 			rotate->Clockwise = false;
 			return rotate->fire(currentDesired);
 			break;
 		case automata::RIGHT_SIDE:
-			//left_vel = 1;
-			//right_vel = 1;
 			return forward->fire(currentDesired);
 			break;
 		case automata::RIGHT_FRONT_SIDE:
 		case automata::RIGHT_FRONT:
-		case automata::RIGHT_BACK:
-			//left_vel = 1;
-			//right_vel = ( ( (double)GetSensorReading(lowestReadingSensor) - m_robot->getRobotRadius() )   / ( (double)THRESHOLD + m_robot->getRobotRadius() ) );// (double)m_sonar->getMaxRange() );
+		//case automata::RIGHT_BACK:
 			rotate->Clockwise = true;
 			return rotate->fire(currentDesired);
 			break;
 		}
-	} else {
-		//left_vel = 1;
-		//right_vel = 1;
-		return forward->fire(currentDesired);
 	}
-
-
-	//m_robot->setVel2(left_vel * 100, right_vel * 100);
-
-	return &m_desire;
+		
+	return forward->fire(currentDesired);
 }
 
 int Avoidance::GetLowestReading() {
