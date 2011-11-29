@@ -13,6 +13,9 @@ Avoidance::Avoidance(void) : ArAction("Avoid")
 
 Avoidance::~Avoidance(void)
 {
+	delete forward;
+	delete rotate;
+	delete stop;
 }
 
 ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{

@@ -12,6 +12,9 @@ Approach::Approach(void) : ArAction("Approach")
 
 Approach::~Approach(void)
 {
+	delete forward;
+	delete rotate;
+	delete stop;
 }
 
 void Approach::Update() {
