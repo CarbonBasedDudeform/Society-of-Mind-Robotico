@@ -27,23 +27,27 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
-		case automata::LEFT_FRONT_SIDE:
+		//case automata::LEFT_FRONT_SIDE:
 			return forward->fire(currentDesired);
 			break;
 		case automata::LEFT_SIDE:
 		case automata::LEFT_FRONT:
 		//case automata::LEFT_BACK:
 			rotate->Clockwise = false;
-			return rotate->fire(currentDesired);
+			m_desire = *rotate->fire(currentDesired);
+			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000);
+			return &m_desire;
 			break;
 		case automata::RIGHT_SIDE:
 			return forward->fire(currentDesired);
 			break;
-		case automata::RIGHT_FRONT_SIDE:
+		//case automata::RIGHT_FRONT_SIDE:
 		case automata::RIGHT_FRONT:
 		//case automata::RIGHT_BACK:
 			rotate->Clockwise = true;
-			return rotate->fire(currentDesired);
+			m_desire = *rotate->fire(currentDesired);
+			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000); //prevent continual rotation
+			return &m_desire;
 			break;
 		}
 	}
