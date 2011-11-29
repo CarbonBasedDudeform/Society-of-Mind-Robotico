@@ -241,22 +241,22 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</Filter>
-		<Filter
-			Name="Maps"
-			>
-			<File
-				RelativePath="D:\Approach Testbed.map"
+			<Filter
+				Name="Maps"
 				>
-			</File>
-			<File
-				RelativePath="D:\Avoidance Testbed.map"
-				>
-			</File>
-			<File
-				RelativePath="D:\Testbed.map"
-				>
-			</File>
+				<File
+					RelativePath=".\Maps\Approach Testbed.map"
+					>
+				</File>
+				<File
+					RelativePath=".\Maps\Avoidance Testbed.map"
+					>
+				</File>
+				<File
+					RelativePath=".\Maps\Testbed.map"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
