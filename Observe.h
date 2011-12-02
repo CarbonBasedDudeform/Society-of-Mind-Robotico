@@ -16,10 +16,10 @@ private:
 	static const int MAX_READING = 5000;
 	Stop* stop;
 	int** readings;
-	int* averageReadings;
+	float* averageReadings;
 	int NumOfSensors;
 	int NumOfReadings;
 	void StoreReadings();
-	int CalcAverage(int sensor);
+	float CalcAverage(int sensor);
 
 };

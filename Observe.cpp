@@ -3,7 +3,7 @@
 Observe::Observe(void) : ArAction("Observe")
 {
 	readings = new int*[5];
-	averageReadings = new int[5];
+	averageReadings = new float[5];
 	NumOfSensors = 5;
 
 	//initialise array
@@ -71,9 +71,10 @@ bool Observe::AnalyseData() {
 		for (int j = 0; j < NumOfSensors; ++j) {
 			if (CalcAverage(j) != averageReadings[j]) {
 				averageReadings[j] = CalcAverage(j);
+				
 				return true;
 			}
-
+std::cout << "calced " << j << ": " << CalcAverage(j);
 			averageReadings[j] = CalcAverage(j);
 		}
 	}
@@ -81,10 +82,10 @@ bool Observe::AnalyseData() {
 	return false;
 }
 
-int Observe::CalcAverage(int sensor) {
-	int avg = 0;
+float Observe::CalcAverage(int sensor) {
+	float avg = 0;
 	for (int i = 0; i < NumOfReadings; ++i)
 		avg += readings[i][sensor];
 
-	return ( avg / NumOfReadings );
+	return ( avg / (float)NumOfReadings );
 }
