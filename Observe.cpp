@@ -1,14 +1,32 @@
 #include "Observe.h"
 
-Observe::Observe(int number_of_sensors)
+Observe::Observe(void) : ArAction("Observe")
 {
-	readings = new int[number_of_sensors][number_of_sensors];
-	NumOfSensors = number_of_sensors;
+	readings = new int*[5];
+	averageReadings = new int[5];
+	NumOfSensors = 5;
+
+	//initialise array
+	for (int i = 0; i < NumOfSensors; ++i)
+	{
+		for (int j = 0; j < NumOfSensors; ++j)
+		{
+			readings[i] = new int[5];
+			readings[i][j] = MAX_READING;
+		}
+
+		averageReadings[i] = MAX_READING;
+	}
+
+
+	NumOfReadings = 0;
 }
 
 Observe::~Observe(void)
 {
 }
+
+#include <iostream>
 
 ArActionDesired* Observe::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
@@ -18,7 +36,12 @@ ArActionDesired* Observe::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
-	
+	std::cout << "Observe firing... ";
+
+	GetNewReadings();
+
+	if (AnalyseData()) std::cout << "Detected change" << std::endl;
+
 	return &m_desire;
 }
 
@@ -32,4 +55,36 @@ void Observe::setRobot(ArRobot *robot) {
 		ArLog::log(ArLog::Terse, "automata: found no sonar therefore deactivating");
 		deactivate();
 	}
+}
+
+void Observe::GetNewReadings() {
+	for (int i = 0; i < NumOfReadings; ++i)
+		for (int j = 0; j < NumOfSensors; ++j)
+			readings[i][j] = GetSensorReading(j);
+
+	if (NumOfReadings >= NumOfSensors) NumOfReadings = 0;
+	else NumOfReadings++;
+}
+
+bool Observe::AnalyseData() {
+	for (int i = 0; i < NumOfReadings; ++i) {
+		for (int j = 0; j < NumOfSensors; ++j) {
+			if (CalcAverage(j) != averageReadings[j]) {
+				averageReadings[j] = CalcAverage(j);
+				return true;
+			}
+
+			averageReadings[j] = CalcAverage(j);
+		}
+	}
+
+	return false;
+}
+
+int Observe::CalcAverage(int sensor) {
+	int avg = 0;
+	for (int i = 0; i < NumOfReadings; ++i)
+		avg += readings[i][sensor];
+
+	return ( avg / NumOfReadings );
 }

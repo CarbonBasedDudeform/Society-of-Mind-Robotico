@@ -4,7 +4,7 @@
 class Observe : public ArAction, public automata
 {
 public:
-	Observe(int number_of_sensors);
+	Observe(void);
 	~Observe(void);
 
 	virtual ArActionDesired *Observe::fire(ArActionDesired currentDesired);
@@ -15,8 +15,11 @@ public:
 private:
 	static const int MAX_READING = 5000;
 	Stop* stop;
-	int* readings;
+	int** readings;
+	int* averageReadings;
 	int NumOfSensors;
+	int NumOfReadings;
 	void StoreReadings();
+	int CalcAverage(int sensor);
 
 };

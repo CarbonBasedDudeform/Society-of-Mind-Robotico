@@ -2,6 +2,7 @@
 #include "avoidance.h"
 #include <iostream>
 #include "Approach.h"
+#include "Observe.h"
 
 int main(int argc, char** argv)
 {
@@ -28,10 +29,12 @@ int main(int argc, char** argv)
 	ArSonarDevice sonar;
 	robot.addRangeDevice(&sonar);
 
-	Avoidance avoidance;
-	robot.addAction(&avoidance, 20);
+	//Avoidance avoidance;
+	//robot.addAction(&avoidance, 20);
 	//Approach approach;
 	//robot.addAction(&approach, 100);
+	Observe observe;
+	robot.addAction(&observe,30);
 
 	//ArModeTeleop teleop(&robot, "teleop", 't', 'T');
 	
