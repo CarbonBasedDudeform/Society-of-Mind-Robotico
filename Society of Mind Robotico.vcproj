@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Explore.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Forward.cpp"
 				>
 			</File>
@@ -221,6 +225,10 @@
 			</File>
 			<File
 				RelativePath=".\Backwards.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Explore.h"
 				>
 			</File>
 			<File

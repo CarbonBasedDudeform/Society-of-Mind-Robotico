@@ -18,7 +18,6 @@ Observe::Observe(void) : ArAction("Observe")
 		averageReadings[i] = MAX_READING;
 	}
 
-
 	NumOfReadings = 0;
 }
 
@@ -74,7 +73,7 @@ bool Observe::AnalyseData() {
 				
 				return true;
 			}
-std::cout << "calced " << j << ": " << CalcAverage(j);
+//std::cout << "calced " << j << ": " << CalcAverage(j);
 			averageReadings[j] = CalcAverage(j);
 		}
 	}

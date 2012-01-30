@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Approach.h"
 #include "Observe.h"
+#include "Explore.h"
 
 int main(int argc, char** argv)
 {
@@ -33,8 +34,10 @@ int main(int argc, char** argv)
 	//robot.addAction(&avoidance, 20);
 	//Approach approach;
 	//robot.addAction(&approach, 100);
-	Observe observe;
-	robot.addAction(&observe,30);
+	//Observe observe;
+	//robot.addAction(&observe,30);
+	Explore explore;
+	robot.addAction(&explore,30);
 
 	//ArModeTeleop teleop(&robot, "teleop", 't', 'T');
 	

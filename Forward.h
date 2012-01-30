@@ -10,5 +10,5 @@ public:
 	virtual ArActionDesired *Forward::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
 private:
-	static const int MAX_VELOCITY = 100;
+	static const int MAX_VELOCITY = 200;
 };

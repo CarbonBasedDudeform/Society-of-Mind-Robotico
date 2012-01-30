@@ -30,9 +30,9 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
-		//case automata::LEFT_FRONT_SIDE:
-			return forward->fire(currentDesired);
-			break;
+			//case automata::LEFT_FRONT_SIDE:
+			//return forward->fire(currentDesired);
+			//break;
 		case automata::LEFT_SIDE:
 		case automata::LEFT_FRONT:
 		//case automata::LEFT_BACK:
