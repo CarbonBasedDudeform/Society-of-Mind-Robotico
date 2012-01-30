@@ -1,37 +1,49 @@
 #include "Explore.h"
 
+#include <iostream>
+
 Explore::Explore(void) : ArAction("Explore")
 {
 	TimesFired = 0;
 	Approaching = true;
+	std::cout << "Creating objects..." << std::endl;
+
 	approach = new Approach();
 	avoidance = new Avoidance();
 }
 
 Explore::~Explore(void)
 {
+	delete approach;
+	delete avoidance;
 }
 
 ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
 	TimesFired++;
+	std::cout << "Firing..." << std::endl;
+
 
 	if (Approaching) {
-		if (TimeFired > MAX_TIMES_FIRED) {
+		if (TimesFired > MAX_TIMES_FIRED) {
 			Approaching = false;
 			TimesFired = 0;
-			m_desire = avoidance;
+			std::cout << "1 avoiding..." << std::endl;
+			return avoidance->fire(currentDesired);
 		} else {
-			m_desire = approach;
+			std::cout << "1 approaching..." << std::endl;
+			return approach->fire(currentDesired);
 		}
 	} else {
-		if (TimeFired > MAX_TIMES_FIRED) {
+		if (TimesFired > MAX_TIMES_FIRED) {
 			Approaching = true;
 			TimesFired = 0;
-			m_desire = approach;
+			std::cout << "2 approaching..." << std::endl;
+			return approach->fire(currentDesired);
 		} else {
-			m_desire = avoidance;
+			std::cout << "2 avoidance..." << std::endl;
+			return avoidance->fire(currentDesired);
 		}
 	}
 
@@ -40,6 +52,9 @@ ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 
 void Explore::setRobot(ArRobot *robot) {
 	ArAction::setRobot(robot);
+	approach->setRobot(robot);
+	avoidance->setRobot(robot);
+
 	m_sonar = robot->findRangeDevice("sonar");
 	//myRobot is variable from aria, just using mine due to style
 	m_robot = myRobot;
