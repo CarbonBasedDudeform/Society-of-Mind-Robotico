@@ -2,6 +2,7 @@
 
 Forward::Forward(void) : ArAction("Forward")
 {
+	velocity = MAX_VELOCITY;
 }
 
 Forward::~Forward(void)
@@ -11,7 +12,9 @@ Forward::~Forward(void)
 ArActionDesired* Forward::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
-	m_desire.setVel(MAX_VELOCITY);
+	std::cout << "Going forward..." << std::endl;
+
+	m_desire.setVel(velocity);
 
 	return &m_desire;
 }
@@ -25,4 +28,8 @@ void Forward::setRobot(ArRobot *robot) {
 		ArLog::log(ArLog::Terse, "automata: found no sonar therefore deactivating");
 		deactivate();
 	}
+}
+
+void Forward::setPower(float power) {
+	velocity = power * MAX_VELOCITY;
 }

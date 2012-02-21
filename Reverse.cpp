@@ -1,6 +1,6 @@
-#include "Backwards.h"
+#include "Reverse.h"
 
-Backwards::Backwards(void) : ArAction("Backwards")
+Backwards::Backwards(void) : ArAction("Reverse")
 {
 }
 
@@ -11,7 +11,9 @@ Backwards::~Backwards(void)
 ArActionDesired* Backwards::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
-	m_desire.setVel(MAX_VELOCITY);
+	std::cout << "Reversing..." << std::endl;
+
+	m_desire.setVel(velocity);
 
 	return &m_desire;
 }
@@ -25,4 +27,8 @@ void Backwards::setRobot(ArRobot *robot) {
 		ArLog::log(ArLog::Terse, "automata: found no sonar therefore deactivating");
 		deactivate();
 	}
+}
+
+void Backwards::setPower(float power) {
+	velocity = MAX_VELOCITY * power;
 }

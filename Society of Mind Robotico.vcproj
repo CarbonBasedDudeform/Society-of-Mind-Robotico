@@ -113,6 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\MobileRobots\Aria\include&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -129,6 +130,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="AriaVC9.lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\MobileRobots\Aria\lib&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -166,6 +169,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Accelerate.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Approach.cpp"
 				>
 			</File>
@@ -178,10 +185,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Backwards.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Explore.cpp"
 				>
 			</File>
@@ -190,11 +193,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Hit.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Observe.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Reverse.cpp"
 				>
 			</File>
 			<File
@@ -212,6 +223,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Accelerate.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Approach.h"
 				>
 			</File>
@@ -224,10 +239,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Backwards.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Explore.h"
 				>
 			</File>
@@ -236,7 +247,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Hit.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Observe.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Reverse.h"
 				>
 			</File>
 			<File

@@ -10,8 +10,12 @@ public:
 	void Update();
 	virtual ArActionDesired *Approach::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
+	void setPower(float power);
+
 private:
 	static const int THRESHOLD = 200;
+	float threshold;
+
 	bool SensorLess(int sensor);
 	bool SensorMore(int sensor);
 	bool LowestReadingInfront();
@@ -19,8 +23,4 @@ private:
 	Forward* forward;
 	Stop* stop;
 	Rotate* rotate;
-
-	int forwardPriority;
-	int stopPriority;
-	int rotatePriority;
 };

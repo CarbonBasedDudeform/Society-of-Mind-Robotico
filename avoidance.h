@@ -10,10 +10,12 @@ public:
 	//unsigned int GetSensorReading(int sensor);
 	virtual ArActionDesired *Avoidance::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
+	void setPower(float power);
 
 private:
 
 	static const int THRESHOLD = 1500;
+	float threshold;
 
 	bool SensorLess(int sensor);
 	bool SensorMore(int sensor);

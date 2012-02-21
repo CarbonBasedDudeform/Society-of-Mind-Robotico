@@ -1,13 +1,10 @@
 #include "Explore.h"
 
-#include <iostream>
-
 Explore::Explore(void) : ArAction("Explore")
 {
 	TimesFired = 0;
+	threshold = MAX_THRESHOLD;
 	Approaching = true;
-	std::cout << "Creating objects..." << std::endl;
-
 	approach = new Approach();
 	avoidance = new Avoidance();
 }
@@ -21,28 +18,29 @@ Explore::~Explore(void)
 ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
+	if (m_sonar == NULL) {
+		deactivate();
+		return NULL;
+	}
+
 	TimesFired++;
-	std::cout << "Firing..." << std::endl;
+	std::cout << "Exploring..." << std::endl;
 
 
 	if (Approaching) {
-		if (TimesFired > MAX_TIMES_FIRED) {
+		if (TimesFired > threshold) {
 			Approaching = false;
 			TimesFired = 0;
-			std::cout << "1 avoiding..." << std::endl;
 			return avoidance->fire(currentDesired);
 		} else {
-			std::cout << "1 approaching..." << std::endl;
 			return approach->fire(currentDesired);
 		}
 	} else {
-		if (TimesFired > MAX_TIMES_FIRED) {
+		if (TimesFired > threshold) {
 			Approaching = true;
 			TimesFired = 0;
-			std::cout << "2 approaching..." << std::endl;
 			return approach->fire(currentDesired);
 		} else {
-			std::cout << "2 avoidance..." << std::endl;
 			return avoidance->fire(currentDesired);
 		}
 	}
@@ -62,4 +60,8 @@ void Explore::setRobot(ArRobot *robot) {
 		ArLog::log(ArLog::Terse, "automata: found no sonar therefore deactivating");
 		deactivate();
 	}
+}
+
+void Explore::setPower(float power) {
+	threshold = MAX_THRESHOLD * power;
 }

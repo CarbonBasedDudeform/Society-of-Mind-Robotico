@@ -1,8 +1,6 @@
 #include "Approach.h"
 #include "automata.h"
 
-#include <iostream>
-
 Approach::Approach(void) : ArAction("Approach")
 {
 	forward = new Forward();
@@ -30,17 +28,17 @@ ArActionDesired* Approach::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
+	std::cout << "Approaching..." << std::endl;
+
 	//check if going in the correct direction
 	if (LowestReadingInfront())
 	{
 		//stop rotating/moving forward
 		if (SensorLess(automata::LEFT_FRONT) && SensorLess(automata::RIGHT_FRONT)) //stop everything!
 			return stop->fire(currentDesired);
-		else if (SensorMore(automata::LEFT_FRONT) && SensorMore(automata::RIGHT_FRONT)) //stop everything!
+		else if (SensorMore(automata::LEFT_FRONT) && SensorMore(automata::RIGHT_FRONT))
 			return forward->fire(currentDesired);
 	} else {
-		//stop any other movemnt
-
 		//start rotating until lowestreading is infront
 		return rotate->fire(currentDesired);
 	}
@@ -61,13 +59,13 @@ void Approach::setRobot(ArRobot *robot) {
 }
 
 bool Approach::SensorLess(int sensor) {
-	if ( (GetSensorReading(sensor) - m_robot->getRobotRadius() ) < THRESHOLD) return true;
+	if ( (GetSensorReading(sensor) - m_robot->getRobotRadius() ) < threshold) return true;
 	
 	return false;
 }
 
 bool Approach::SensorMore(int sensor) {
-	if ((GetSensorReading(sensor) - m_robot->getRobotRadius() ) > THRESHOLD) return true;
+	if ((GetSensorReading(sensor) - m_robot->getRobotRadius() ) > threshold) return true;
 
 	return false;
 }
@@ -87,4 +85,8 @@ bool Approach::LowestReadingInfront() {
 	if (sensor == automata::LEFT_FRONT || sensor == automata::RIGHT_FRONT) return true;
 
 	return false;
+}
+
+void Approach::setPower(float power) {
+	threshold = THRESHOLD * power;
 }

@@ -10,6 +10,7 @@ Stop::~Stop(void)
 ArActionDesired* Stop::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
+	std::cout << "Stopping..." << std::endl;
 	m_desire.setVel(0);
 	m_desire.setRotVel(0);
 

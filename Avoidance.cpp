@@ -26,16 +26,14 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 		return NULL;
 	}
 
+	std::cout << "Avoiding..." << std::endl;
+
 	int lowestReadingSensor = GetLowestReading();
 
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
-			//case automata::LEFT_FRONT_SIDE:
-			//return forward->fire(currentDesired);
-			//break;
 		case automata::LEFT_SIDE:
 		case automata::LEFT_FRONT:
-		//case automata::LEFT_BACK:
 			rotate->Clockwise = false;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000);
@@ -44,9 +42,7 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 		case automata::RIGHT_SIDE:
 			return forward->fire(currentDesired);
 			break;
-		//case automata::RIGHT_FRONT_SIDE:
 		case automata::RIGHT_FRONT:
-		//case automata::RIGHT_BACK:
 			rotate->Clockwise = true;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000); //prevent continual rotation
@@ -88,13 +84,17 @@ void Avoidance::setRobot(ArRobot *robot) {
 
 
 bool Avoidance::SensorLess(int sensor) {
-	if ( (GetSensorReading(sensor) - m_robot->getRobotRadius() ) < THRESHOLD) return true;
+	if ( (GetSensorReading(sensor) - m_robot->getRobotRadius() ) < threshold) return true;
 	
 	return false;
 }
 
 bool Avoidance::SensorMore(int sensor) {
-	if ((GetSensorReading(sensor) - m_robot->getRobotRadius() ) > THRESHOLD) return true;
+	if ((GetSensorReading(sensor) - m_robot->getRobotRadius() ) > threshold) return true;
 
 	return false;
+}
+
+void Avoidance::setPower(float power) {
+	threshold = THRESHOLD * power;
 }

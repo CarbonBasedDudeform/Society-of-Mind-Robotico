@@ -10,6 +10,8 @@ public:
 	virtual ArActionDesired *Rotate::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
 	bool Clockwise;
+	void setPower(float power);
 private:
 	static const int MAX_VELOCITY = 100;
+	float velocity;
 };

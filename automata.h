@@ -19,6 +19,7 @@ public:
 
 	unsigned int GetSensorReading(int sensor);
 	void setRobot(ArRobot *robot);
+	float power;
 
 protected:
 	ArRangeDevice *m_sonar;

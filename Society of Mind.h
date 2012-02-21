@@ -3,5 +3,7 @@
 #include "Aria.h"
 #include "Stop.h"
 #include "Forward.h"
-#include "Backwards.h"
+#include "Reverse.h"
 #include "Rotate.h"
+#include "Accelerate.h"
+#include <iostream>
