@@ -19,6 +19,7 @@ private:
 	bool SensorLess(int sensor);
 	bool SensorMore(int sensor);
 	bool LowestReadingInfront();
+	int GetLowestReading();
 
 	Forward* forward;
 	Stop* stop;

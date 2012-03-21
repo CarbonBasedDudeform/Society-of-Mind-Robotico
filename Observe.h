@@ -15,12 +15,14 @@ public:
 	void GetNewReadings();
 	void setPower(float power);
 	static bool HasFoundBall;
+	static const int MAX_RECURSE = 1;
+	static int timesRecursed;
 	
 private:
 	static const int MAX_READING = 5000;
 	static const int DEFUALT_NUM_SENSORS = 5;
 	static const int MAX_THRESHOLD = 100;
-	static const int MAX_NUM_TICKS = 1000;
+	static const int MAX_NUM_TICKS = 10000;
 	static const int MAX_CONFIDENCE = 20;
 	int confidence;
 	int numOfTicksToWait;
@@ -29,7 +31,7 @@ private:
 	Stop* stop;
 	Explore* explore;
 
-	int** readings;
+	float** readings;
 	float* averageReadings;
 	int NumOfSensors;
 	int NumOfReadings;

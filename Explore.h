@@ -18,6 +18,7 @@ private:
 	Avoidance* avoidance;
 	int TimesFired;
 	static const int MAX_THRESHOLD = 1000;
+	static const int MAX_APPROACH = 500;
 	float threshold;
 
 	bool Approaching;

@@ -9,5 +9,7 @@ public:
 
 	virtual ArActionDesired *Stop::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
+	void setPower(float power);
+
 private:
 };

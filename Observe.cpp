@@ -2,10 +2,11 @@
 
 const double Observe::PI = 3.14159265;
 const double Observe::E = 2.71828183;
+int Observe::timesRecursed = 0;
 
 Observe::Observe(void) : ArAction("Observe")
 {
-	readings = new int*[DEFUALT_NUM_SENSORS];
+	readings = new float*[DEFUALT_NUM_SENSORS];
 	averageReadings = new float[DEFUALT_NUM_SENSORS];
 	NumOfSensors = DEFUALT_NUM_SENSORS;
 	threshold = MAX_THRESHOLD;
@@ -17,7 +18,7 @@ Observe::Observe(void) : ArAction("Observe")
 	{
 		for (int j = 0; j < NumOfSensors; ++j)
 		{
-			readings[i] = new int[DEFUALT_NUM_SENSORS];
+			readings[i] = new float[DEFUALT_NUM_SENSORS];
 			readings[i][j] = MAX_READING;
 		}
 
@@ -46,22 +47,22 @@ ArActionDesired* Observe::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
-	std::cout << "Observing... Threshold[" << threshold << "] MAX[" << MAX_THRESHOLD << "]" <<std::endl;
+	std::cout << "Observing..." <<std::endl;
 
 	do {
 
-	numOfTicks++;
-	GetNewReadings();
+		numOfTicks++;
+		GetNewReadings();
 
-	if ( AnalyseData() || HasFoundBall ) {
-		std::cout << "Found Ball." << std::endl;
-		HasFoundBall = true;
-		return stop->fire(currentDesired);
-	} else if (numOfTicks >= numOfTicksToWait) {
-		std::cout << "Didn't find ball" << std::endl;
-		return explore->fire(currentDesired);
-	}
+		if ( AnalyseData()) {
+			std::cout << "Found Ball." << std::endl;
+			//HasFoundBall = true;
+			return stop->fire(currentDesired);
+		}
 	} while (numOfTicks < numOfTicksToWait);
+
+	std::cout << "Didn't find ball" << std::endl;
+	numOfTicks = 0;
 
 	return &m_desire;
 }
@@ -82,17 +83,22 @@ void Observe::setRobot(ArRobot *robot) {
 }
 
 void Observe::GetNewReadings() {
-	for (int i = 0; i < NumOfReadings; ++i)
-		for (int j = 0; j < NumOfSensors; ++j)
-			readings[i][j] = GetSensorReading(j);
+	for (int i = 0; i < DEFUALT_NUM_SENSORS; i++)
+		for (int j = 0; j < DEFUALT_NUM_SENSORS; j++)
+		{
+			readings[i][j] = Gaussian(j);
+			//std::cout << "reading: " << readings[i][j] << std::endl;
+		}
 
-	if (NumOfReadings >= NumOfSensors) NumOfReadings = 0;
-	else NumOfReadings++;
+	if (NumOfReadings < NumOfSensors) 
+		NumOfReadings++;
 }
 
 bool Observe::AnalyseData() {
-	for (int i = 0; i < NumOfReadings; ++i) {
-		for (int j = 0; j < NumOfSensors; ++j) {
+	confidence = 0;
+
+	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i) {
+		for (int j = 0; j < DEFUALT_NUM_SENSORS; ++j) {
 				float stdev = StandardDeviation(j);
 				if (stdev >= MAX_THRESHOLD) { 
 				confidence++;
@@ -100,9 +106,10 @@ bool Observe::AnalyseData() {
 				if (confidence >= MAX_CONFIDENCE) 
 				{
 					std::cout << "Observed Change." << std::endl;
+					confidence = 0;
 					return true;
 				} 
-			} else { if (confidence > 0) confidence--; }
+			} //else { if (confidence > 0) confidence--;std::cout << "Confidence: [" << confidence << "]" << std::endl; }
 		}
 	}
 
@@ -111,16 +118,19 @@ bool Observe::AnalyseData() {
 
 float Observe::Mean(int sensor) {
 	float avg = 0;
-	for (int i = 0; i < NumOfReadings; ++i)
+	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i)
+	{
 		avg += readings[i][sensor];
+		//std::cout << "reading: " << readings[i][sensor] << " Avg: " << avg << std::endl;
+	}
 
 	if (avg < 0 ) {
-		//for (int i = 0; i < NumOfReadings; ++i)
-			//std::cout << "Reading["<<i<<"]: " << readings[i][sensor];
+		for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i)
+			std::cout << "Reading["<<i<<"]: " << readings[i][sensor];
 	}
 
 	//std::cout << "Avg: " << avg << " ret: " << avg / (float)NumOfReadings << std::endl;
-	return ( avg / (float)NumOfReadings );
+	return ( avg / (float)DEFUALT_NUM_SENSORS );
 }
 
 float Observe::Variance(int sensor) {
@@ -129,9 +139,13 @@ float Observe::Variance(int sensor) {
 
 	float variance = 0;
 
-	for (int i = 0; i < NumOfReadings; ++i)
-		variance += (readings[i][sensor] - mean) * (readings[i][sensor] - mean);
+	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i)
+	{
+		//std::cout << "reading: " << readings[i][sensor] << " Mean: " << mean << " Var: " << variance << std::endl;
+		variance += ( (readings[i][sensor] - mean) * (readings[i][sensor] - mean) );
 	
+	}
+
 	return (variance / (float) NumOfReadings);
 }
 
@@ -142,7 +156,7 @@ float Observe::StandardDeviation(int sensor) {
 }
 
 float Observe::Gaussian(int sensor) {
-	return -1;
+	return GetSensorReading(sensor);
 }
 
 void Observe::setPower(float power) {

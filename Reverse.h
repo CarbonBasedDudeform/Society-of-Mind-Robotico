@@ -1,13 +1,13 @@
 #pragma once
 #include "Society of Mind.h"
 
-class Backwards : public ArAction, public automata
+class Reverse : public ArAction, public automata
 {
 public:
-	Backwards(void);
-	~Backwards(void);
+	Reverse(void);
+	~Reverse(void);
 
-	virtual ArActionDesired *Backwards::fire(ArActionDesired currentDesired);
+	virtual ArActionDesired *Reverse::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
 	void setPower(float power);
 

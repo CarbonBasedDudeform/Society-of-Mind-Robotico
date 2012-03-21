@@ -5,10 +5,14 @@ Hit::Hit(void) : ArAction("Hit")
 	approach = new Approach();
 	accelerate = new Accelerate();
 	observe = new Observe();
+	explore = new Explore();
+
 	threshold = 0;
 	distanceToBall = DEFAULT_DISTANCE; 
 	originalX = 0;
 	originalY = 0;
+	ticks = 0;
+	AttemptedToHitRecently = false;
 }
 
 Hit::~Hit(void)
@@ -16,6 +20,7 @@ Hit::~Hit(void)
 	delete approach;
 	delete accelerate;
 	delete observe;
+	delete explore;
 }
 
 ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
@@ -28,29 +33,42 @@ ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
 
 	std::cout << "Hitting.." << std::endl;
 
-	if ( GetSensorReading(automata::LEFT_FRONT) < threshold ) {
-		//record reading aka distance from robot to ball
-		//travel a little further than that
-		//then stop and observe
-		RecordPosition();
-		RecordDistance(automata::LEFT_FRONT);	
-
-		if (ExceededDistance()) {
-			return observe->fire(currentDesired);
+	if (AttemptedToHitRecently) {
+		if (ticks > TICKS_THRESHOLD) {
+			ticks = 0;
+			AttemptedToHitRecently = false;
 		} else {
-			return accelerate->fire(currentDesired);
-		}
-	} else if (GetSensorReading(automata::RIGHT_FRONT) < threshold) {
-		RecordPosition();
-		RecordDistance(automata::RIGHT_FRONT);
-		
-		if (ExceededDistance()) {
-			return observe->fire(currentDesired);
-		} else {
-			return accelerate->fire(currentDesired);
+			ticks++;
+			//explore some more
+			return explore->fire(currentDesired);
 		}
 	} else {
-		return approach->fire(currentDesired);
+		if ( GetSensorReading(automata::LEFT_FRONT) < threshold ) {
+			//record reading aka distance from robot to ball
+			//travel a little further than that
+			//then stop and observe
+			RecordPosition();
+			RecordDistance(automata::LEFT_FRONT);	
+
+			if (ExceededDistance()) {
+				AttemptedToHitRecently = true;
+				return observe->fire(currentDesired);
+			} else {
+				return accelerate->fire(currentDesired);
+			}
+		} else if (GetSensorReading(automata::RIGHT_FRONT) < threshold) {
+			RecordPosition();
+			RecordDistance(automata::RIGHT_FRONT);
+
+			if (ExceededDistance()) {
+				AttemptedToHitRecently = true;
+				return observe->fire(currentDesired);
+			} else {
+				return accelerate->fire(currentDesired);
+			}
+		} else {
+			return approach->fire(currentDesired);
+		}
 	}
 
 	return &m_desire;
@@ -90,6 +108,7 @@ void Hit::setRobot(ArRobot *robot) {
 
 	approach->setRobot(robot);
 	observe->setRobot(robot);
+	explore->setRobot(robot);
 }
 
 void Hit::setPower(float power) {

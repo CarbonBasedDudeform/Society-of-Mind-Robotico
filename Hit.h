@@ -1,7 +1,8 @@
 #pragma once
-#include "automata.h"
+#include "Society of Mind.h"
 #include "Approach.h"
 #include "Observe.h"
+#include "Explore.h"
 
 class Hit: public ArAction, public automata
 {
@@ -12,6 +13,8 @@ public:
 	virtual ArActionDesired *Hit::fire(ArActionDesired currentDesired);
 	void setRobot(ArRobot *robot);
 	void setPower(float power);
+
+	bool AttemptedToHitRecently;
 
 private:
 	static const int MAX_THRESHOLD = 400;
@@ -28,17 +31,12 @@ private:
 	Accelerate* accelerate;
 	Approach* approach;
 	Observe* observe;
+	Explore* explore;
 
 	float distanceToBall;
 	float originalX;
 	float originalY;
-};
 
-//the doom and gloom
-//of your room
-//as you write computer code
-//stuck in your abode
-//entertaining your chode until
-//you blow your load
-//and compile your code.
-//error C2065: fuck not followed by cunt somwhere in your codebase, try line 15. that's not it and it's of no help at all but meh. C++, what a fucking cunt knobjockey asswipe of a language.
+	static const int TICKS_THRESHOLD = 50;
+	int ticks;
+};

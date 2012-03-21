@@ -40,12 +40,40 @@ ArActionDesired* Approach::fire(ArActionDesired currentDesired) {
 			return forward->fire(currentDesired);
 	} else {
 		//start rotating until lowestreading is infront
+
+		int lowestReadingSensor = GetLowestReading();
+
+		switch (lowestReadingSensor) {
+			case automata::LEFT_FRONT:
+			case automata::LEFT_FRONT_SIDE:
+			//case automata::LEFT_SIDE:
+				rotate->Clockwise = true;
+				break;
+			//case automata::RIGHT_SIDE:
+			case automata::RIGHT_FRONT:
+			case automata::RIGHT_FRONT_SIDE:
+				rotate->Clockwise = false;
+				break;
+		}
+
 		return rotate->fire(currentDesired);
 	}
 	
 	return &m_desire;
 }
 
+int Approach::GetLowestReading() {
+	int lowestReadingSensor = 0;
+
+	for (int i = 0; i < m_robot->getNumSonar(); i++)
+	{
+		if (GetSensorReading(i) < GetSensorReading(lowestReadingSensor) || i == 0) { //i == 0 because first reading will never be less than itself
+			lowestReadingSensor = i;
+		}
+	}
+
+	return lowestReadingSensor;
+}
 
 void Approach::setRobot(ArRobot *robot) {
 	ArAction::setRobot(robot);

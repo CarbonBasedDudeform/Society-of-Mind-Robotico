@@ -4,7 +4,7 @@ Explore::Explore(void) : ArAction("Explore")
 {
 	TimesFired = 0;
 	threshold = MAX_THRESHOLD;
-	Approaching = true;
+	Approaching = false;
 	approach = new Approach();
 	avoidance = new Avoidance();
 }
@@ -28,7 +28,7 @@ ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 
 
 	if (Approaching) {
-		if (TimesFired > threshold) {
+		if (TimesFired > MAX_APPROACH) {
 			Approaching = false;
 			TimesFired = 0;
 			return avoidance->fire(currentDesired);
@@ -36,7 +36,7 @@ ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 			return approach->fire(currentDesired);
 		}
 	} else {
-		if (TimesFired > threshold) {
+		if (TimesFired > MAX_THRESHOLD) {
 			Approaching = true;
 			TimesFired = 0;
 			return approach->fire(currentDesired);

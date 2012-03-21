@@ -1,13 +1,13 @@
 #include "Avoidance.h"
-#include "automata.h"
 
-#include <iostream>
 
-Avoidance::Avoidance(void) : ArAction("Avoid")
+Avoidance::Avoidance() : ArAction("Avoid")
 {
 	forward = new Forward();
 	rotate = new Rotate();
 	stop = new Stop();
+
+	threshold = 300;
 }
 
 
@@ -30,19 +30,23 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 
 	int lowestReadingSensor = GetLowestReading();
 
+	std::cout << "lowest: " << lowestReadingSensor << std::endl;
+
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
-		case automata::LEFT_SIDE:
 		case automata::LEFT_FRONT:
+		case automata::LEFT_FRONT_SIDE:
+		case automata::LEFT_SIDE:
 			rotate->Clockwise = false;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000);
 			return &m_desire;
 			break;
+			//return forward->fire(currentDesired);
+			//break;
 		case automata::RIGHT_SIDE:
-			return forward->fire(currentDesired);
-			break;
 		case automata::RIGHT_FRONT:
+		case automata::RIGHT_FRONT_SIDE:
 			rotate->Clockwise = true;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000); //prevent continual rotation
@@ -59,7 +63,7 @@ int Avoidance::GetLowestReading() {
 
 	for (int i = 0; i < m_robot->getNumSonar(); i++)
 	{
-		if (GetSensorReading(i) < GetSensorReading(lowestReadingSensor)) {
+		if (GetSensorReading(i) < GetSensorReading(lowestReadingSensor) || i == 0) { //i == 0 because first reading will never be less than itself
 			lowestReadingSensor = i;
 		}
 

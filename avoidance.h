@@ -13,7 +13,8 @@ public:
 	void setPower(float power);
 
 private:
-
+	int NumOfSubagents;
+	ArAction* Subagents;
 	static const int THRESHOLD = 1500;
 	float threshold;
 

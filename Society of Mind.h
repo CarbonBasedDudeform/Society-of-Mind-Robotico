@@ -7,3 +7,22 @@
 #include "Rotate.h"
 #include "Accelerate.h"
 #include <iostream>
+
+struct SUBAGENT {
+	int type;
+	float power;
+};
+
+enum AGENTS {
+	CONTROL,
+	ACCELERATE,
+	APPROACH,
+	AVOIDANCE,
+	REVERSE,
+	EXPLORE,
+	FORWARD,
+	HIT,
+	OBSERVE,
+	ROTATE,
+	STOP
+};

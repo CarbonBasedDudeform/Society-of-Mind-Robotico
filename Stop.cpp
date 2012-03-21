@@ -27,3 +27,8 @@ void Stop::setRobot(ArRobot *robot) {
 		deactivate();
 	}
 }
+
+void Stop::setPower(float power) {
+	//nothing to do here...yet
+}
+

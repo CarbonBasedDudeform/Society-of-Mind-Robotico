@@ -1,14 +1,14 @@
 #include "Reverse.h"
 
-Backwards::Backwards(void) : ArAction("Reverse")
+Reverse::Reverse(void) : ArAction("Reverse")
 {
 }
 
-Backwards::~Backwards(void)
+Reverse::~Reverse(void)
 {
 }
 
-ArActionDesired* Backwards::fire(ArActionDesired currentDesired) {
+ArActionDesired* Reverse::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
 	std::cout << "Reversing..." << std::endl;
@@ -18,7 +18,7 @@ ArActionDesired* Backwards::fire(ArActionDesired currentDesired) {
 	return &m_desire;
 }
 
-void Backwards::setRobot(ArRobot *robot) {
+void Reverse::setRobot(ArRobot *robot) {
 	ArAction::setRobot(robot);
 	m_sonar = robot->findRangeDevice("sonar");
 	//myRobot is variable from aria, just using mine due to style
@@ -29,6 +29,6 @@ void Backwards::setRobot(ArRobot *robot) {
 	}
 }
 
-void Backwards::setPower(float power) {
+void Reverse::setPower(float power) {
 	velocity = MAX_VELOCITY * power;
 }
