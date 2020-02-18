@@ -7,6 +7,9 @@
 #include "Rotate.h"
 #include "Accelerate.h"
 #include <iostream>
+#include <fstream>
+
+using namespace std;
 
 struct SUBAGENT {
 	int type;

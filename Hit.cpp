@@ -31,6 +31,13 @@ ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
+	ofstream output;
+	output.open("output.txt", ios::app);
+	time_t t;
+	t = time(0);
+	struct tm *now;
+	now = localtime(&t);
+
 	std::cout << "Hitting.." << std::endl;
 
 	if (AttemptedToHitRecently) {
@@ -40,6 +47,7 @@ ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
 		} else {
 			ticks++;
 			//explore some more
+			output << "1 1 0 0 ";
 			return explore->fire(currentDesired);
 		}
 	} else {
@@ -52,8 +60,10 @@ ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
 
 			if (ExceededDistance()) {
 				AttemptedToHitRecently = true;
+				output << "1 0 0 1 ";
 				return observe->fire(currentDesired);
 			} else {
+				output << "1 0 1 0 ";
 				return accelerate->fire(currentDesired);
 			}
 		} else if (GetSensorReading(automata::RIGHT_FRONT) < threshold) {
@@ -62,11 +72,14 @@ ArActionDesired* Hit::fire(ArActionDesired currentDesired) {
 
 			if (ExceededDistance()) {
 				AttemptedToHitRecently = true;
+				output << "1 0 0 1 ";
 				return observe->fire(currentDesired);
 			} else {
+				output << "1 0 1 0 ";
 				return accelerate->fire(currentDesired);
 			}
 		} else {
+			output << "1 0 0 0 ";
 			return approach->fire(currentDesired);
 		}
 	}

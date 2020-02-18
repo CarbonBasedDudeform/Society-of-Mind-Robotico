@@ -2,12 +2,11 @@
 
 const double Observe::PI = 3.14159265;
 const double Observe::E = 2.71828183;
-int Observe::timesRecursed = 0;
 
 Observe::Observe(void) : ArAction("Observe")
 {
-	readings = new float*[DEFUALT_NUM_SENSORS];
-	averageReadings = new float[DEFUALT_NUM_SENSORS];
+	readings = new unsigned int*[DEFUALT_NUM_SENSORS];
+	averageReadings = new int[DEFUALT_NUM_SENSORS];
 	NumOfSensors = DEFUALT_NUM_SENSORS;
 	threshold = MAX_THRESHOLD;
 	numOfTicksToWait = MAX_NUM_TICKS;
@@ -18,14 +17,14 @@ Observe::Observe(void) : ArAction("Observe")
 	{
 		for (int j = 0; j < NumOfSensors; ++j)
 		{
-			readings[i] = new float[DEFUALT_NUM_SENSORS];
+			readings[i] = new unsigned int[DEFUALT_NUM_SENSORS];
 			readings[i][j] = MAX_READING;
 		}
 
 		averageReadings[i] = MAX_READING;
 	}
 
-	NumOfReadings = 0;
+	NumOfReadings = 1;
 
 	stop = new Stop();
 	explore = new Explore();
@@ -47,6 +46,13 @@ ArActionDesired* Observe::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
+	ofstream output;
+	output.open("output.txt", ios::app);
+	time_t t;
+	t = time(0);
+	struct tm *now;
+	now = localtime(&t);
+
 	std::cout << "Observing..." <<std::endl;
 
 	do {
@@ -56,13 +62,17 @@ ArActionDesired* Observe::fire(ArActionDesired currentDesired) {
 
 		if ( AnalyseData()) {
 			std::cout << "Found Ball." << std::endl;
-			//HasFoundBall = true;
+			output << "0 0 0 1 0 " << now->tm_hour << ":" << now->tm_min
+			<< ":" << now->tm_sec << endl;
 			return stop->fire(currentDesired);
 		}
 	} while (numOfTicks < numOfTicksToWait);
 
 	std::cout << "Didn't find ball" << std::endl;
 	numOfTicks = 0;
+
+	output << "0 0 0 0 0 " << now->tm_hour << ":" << now->tm_min
+			<< ":" << now->tm_sec << endl;
 
 	return &m_desire;
 }
@@ -84,14 +94,16 @@ void Observe::setRobot(ArRobot *robot) {
 
 void Observe::GetNewReadings() {
 	for (int i = 0; i < DEFUALT_NUM_SENSORS; i++)
-		for (int j = 0; j < DEFUALT_NUM_SENSORS; j++)
+	{
+		for (int j = 0; j < NumOfReadings; j++)
 		{
-			readings[i][j] = Gaussian(j);
-			//std::cout << "reading: " << readings[i][j] << std::endl;
+			readings[i][j] = GetSensorReading(j);//Gaussian(j);
 		}
-
-	if (NumOfReadings < NumOfSensors) 
+	}
+	
+	if (NumOfReadings < DEFUALT_NUM_SENSORS) {
 		NumOfReadings++;
+	}
 }
 
 bool Observe::AnalyseData() {
@@ -100,6 +112,7 @@ bool Observe::AnalyseData() {
 	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i) {
 		for (int j = 0; j < DEFUALT_NUM_SENSORS; ++j) {
 				float stdev = StandardDeviation(j);
+
 				if (stdev >= MAX_THRESHOLD) { 
 				confidence++;
 				std::cout << "Confidence: [" << confidence << "]" << std::endl;
@@ -109,7 +122,7 @@ bool Observe::AnalyseData() {
 					confidence = 0;
 					return true;
 				} 
-			} //else { if (confidence > 0) confidence--;std::cout << "Confidence: [" << confidence << "]" << std::endl; }
+			} 
 		}
 	}
 
@@ -118,10 +131,9 @@ bool Observe::AnalyseData() {
 
 float Observe::Mean(int sensor) {
 	float avg = 0;
-	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i)
+	for (int i = 0; i < NumOfReadings; ++i)
 	{
 		avg += readings[i][sensor];
-		//std::cout << "reading: " << readings[i][sensor] << " Avg: " << avg << std::endl;
 	}
 
 	if (avg < 0 ) {
@@ -129,19 +141,16 @@ float Observe::Mean(int sensor) {
 			std::cout << "Reading["<<i<<"]: " << readings[i][sensor];
 	}
 
-	//std::cout << "Avg: " << avg << " ret: " << avg / (float)NumOfReadings << std::endl;
-	return ( avg / (float)DEFUALT_NUM_SENSORS );
+	return ( avg / (float)NumOfReadings );
 }
 
 float Observe::Variance(int sensor) {
 	float mean = Mean(sensor);
-	//std::cout << "Mean: " << mean << std::endl;
 
 	float variance = 0;
 
-	for (int i = 0; i < DEFUALT_NUM_SENSORS; ++i)
+	for (int i = 0; i < NumOfReadings; ++i)
 	{
-		//std::cout << "reading: " << readings[i][sensor] << " Mean: " << mean << " Var: " << variance << std::endl;
 		variance += ( (readings[i][sensor] - mean) * (readings[i][sensor] - mean) );
 	
 	}
@@ -151,7 +160,6 @@ float Observe::Variance(int sensor) {
 
 float Observe::StandardDeviation(int sensor) {
 	float std = sqrt(Variance(sensor));
-	//std::cout << "std: " << std << std::endl;
 	return std;
 }
 

@@ -28,6 +28,13 @@ ArActionDesired* Approach::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
+	ofstream output;
+	output.open("output.txt", ios::app);
+	time_t t;
+	t = time(0);
+	struct tm *now;
+	now = localtime(&t);
+
 	std::cout << "Approaching..." << std::endl;
 
 	//check if going in the correct direction
@@ -35,26 +42,33 @@ ArActionDesired* Approach::fire(ArActionDesired currentDesired) {
 	{
 		//stop rotating/moving forward
 		if (SensorLess(automata::LEFT_FRONT) && SensorLess(automata::RIGHT_FRONT)) //stop everything!
+		{
+			output << "1 0 0 1 0 " << now->tm_hour << ":" << now->tm_min
+		<< ":" << now->tm_sec << endl;
 			return stop->fire(currentDesired);
-		else if (SensorMore(automata::LEFT_FRONT) && SensorMore(automata::RIGHT_FRONT))
+		} else if (SensorMore(automata::LEFT_FRONT) && SensorMore(automata::RIGHT_FRONT))
+		{
+			output << "1 0 1 0 0 " << now->tm_hour << ":" << now->tm_min
+		<< ":" << now->tm_sec << endl;
 			return forward->fire(currentDesired);
+		}
 	} else {
 		//start rotating until lowestreading is infront
-
 		int lowestReadingSensor = GetLowestReading();
 
 		switch (lowestReadingSensor) {
 			case automata::LEFT_FRONT:
 			case automata::LEFT_FRONT_SIDE:
-			//case automata::LEFT_SIDE:
 				rotate->Clockwise = true;
 				break;
-			//case automata::RIGHT_SIDE:
 			case automata::RIGHT_FRONT:
 			case automata::RIGHT_FRONT_SIDE:
 				rotate->Clockwise = false;
 				break;
 		}
+
+		output << "1 0 0 0 1 " << now->tm_hour << ":" << now->tm_min
+		<< ":" << now->tm_sec << endl;
 
 		return rotate->fire(currentDesired);
 	}

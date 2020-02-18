@@ -11,7 +11,7 @@ ArActionDesired* Stop::fire(ArActionDesired currentDesired) {
 	m_desire.reset();
 
 	std::cout << "Stopping..." << std::endl;
-	m_desire.setVel(0);
+	m_desire.setVel(0); //MAX_THRESH - THRESHOLD 
 	m_desire.setRotVel(0);
 
 	return &m_desire;
@@ -29,6 +29,6 @@ void Stop::setRobot(ArRobot *robot) {
 }
 
 void Stop::setPower(float power) {
-	//nothing to do here...yet
+	//THRESHOLD = power * MAX_THRESH
 }
 

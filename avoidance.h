@@ -15,7 +15,7 @@ public:
 private:
 	int NumOfSubagents;
 	ArAction* Subagents;
-	static const int THRESHOLD = 1500;
+	static const int THRESHOLD = 300;
 	float threshold;
 
 	bool SensorLess(int sensor);

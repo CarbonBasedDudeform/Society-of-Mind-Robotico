@@ -23,6 +23,13 @@ ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 		return NULL;
 	}
 
+	ofstream output;
+	output.open("output.txt", ios::app);
+	time_t t;
+	t = time(0);
+	struct tm *now;
+	now = localtime(&t);
+
 	TimesFired++;
 	std::cout << "Exploring..." << std::endl;
 
@@ -31,16 +38,20 @@ ArActionDesired* Explore::fire(ArActionDesired currentDesired) {
 		if (TimesFired > MAX_APPROACH) {
 			Approaching = false;
 			TimesFired = 0;
+			//output << "0 1 ";
 			return avoidance->fire(currentDesired);
 		} else {
+			//output << "1 0 ";
 			return approach->fire(currentDesired);
 		}
 	} else {
 		if (TimesFired > MAX_THRESHOLD) {
 			Approaching = true;
 			TimesFired = 0;
+			//output << "0 1 ";
 			return approach->fire(currentDesired);
 		} else {
+			//output << "1 0 ";
 			return avoidance->fire(currentDesired);
 		}
 	}

@@ -1,5 +1,6 @@
 #include "Forward.h"
 
+
 Forward::Forward(void) : ArAction("Forward")
 {
 	velocity = MAX_VELOCITY;
@@ -15,7 +16,8 @@ ArActionDesired* Forward::fire(ArActionDesired currentDesired) {
 	std::cout << "Going forward..." << std::endl;
 
 	m_desire.setVel(velocity);
-
+	
+	
 	return &m_desire;
 }
 

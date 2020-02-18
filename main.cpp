@@ -11,15 +11,6 @@
 
 using namespace std;
 
-/*			TODO		
-  - add code to agents  
-   cycling through subagents
-  -add code to deal with
-  order of things
-  -add preconfig mode
-  - make observe guauauassian 
-*/
-
 enum ARCHITECTURE {
 	SYNCHRONOUS,
 	ASYNCHRONOUS,
@@ -57,9 +48,15 @@ int main(int argc, char** argv)
 	ArSonarDevice sonar;
 	robot.addRangeDevice(&sonar);
 
+	//ArModeTeleop teleop(&robot, "teleop", 't', 'T');
 	Hit hit;
+	//Hit hit;
 	hit.setPower(1.0f);
 	robot.addAction(&hit, 50);
+
+	ofstream output;
+	output.open("output.txt", ios::app);
+	output << "Hit Explore Accelerate Observe Approach Avoidance Forward Stop Rotate" << std::endl;
 
 	robot.enableMotors();
 
@@ -73,7 +70,6 @@ int main(int argc, char** argv)
 		Aria::exit(2);
 	}
 
-	//while(!Observe::HasFoundBall) 
 	while(true) {
 		if (Observe::HasFoundBall) {
 			Aria::shutdown();
@@ -81,6 +77,5 @@ int main(int argc, char** argv)
 		}
 	}
 
-	//Aria::shutdown();
 	return 0;
 }

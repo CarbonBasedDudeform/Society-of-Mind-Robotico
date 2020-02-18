@@ -7,7 +7,7 @@ Avoidance::Avoidance() : ArAction("Avoid")
 	rotate = new Rotate();
 	stop = new Stop();
 
-	threshold = 300;
+	threshold = 200;
 }
 
 
@@ -26,11 +26,16 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 		return NULL;
 	}
 
+	ofstream output;
+	output.open("output.txt", ios::app);
+	time_t t;
+	t = time(0);
+	struct tm *now;
+	now = localtime(&t);
+
 	std::cout << "Avoiding..." << std::endl;
 
 	int lowestReadingSensor = GetLowestReading();
-
-	std::cout << "lowest: " << lowestReadingSensor << std::endl;
 
 	if (SensorLess(lowestReadingSensor)) {
 		switch (lowestReadingSensor) {
@@ -40,21 +45,27 @@ ArActionDesired *Avoidance::fire(ArActionDesired currentDesired)	{
 			rotate->Clockwise = false;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000);
+			output << "0 1 0 0 1 " << now->tm_hour << ":" << now->tm_min
+				<< ":" << now->tm_sec << endl;
 			return &m_desire;
 			break;
-			//return forward->fire(currentDesired);
-			//break;
 		case automata::RIGHT_SIDE:
 		case automata::RIGHT_FRONT:
 		case automata::RIGHT_FRONT_SIDE:
 			rotate->Clockwise = true;
 			m_desire = *rotate->fire(currentDesired);
 			m_desire.setVel(GetSensorReading(lowestReadingSensor) / 5000); //prevent continual rotation
+			output << "0 1 0 0 1 " << now->tm_hour << ":" << now->tm_min
+				<< ":" << now->tm_sec << endl;
 			return &m_desire;
 			break;
 		}
+	} else {
+		output << "0 1 1 0 0 " << now->tm_hour << ":" << now->tm_min
+				<< ":" << now->tm_sec << endl;
 	}
-		
+
+	output.close();
 	return forward->fire(currentDesired);
 }
 
